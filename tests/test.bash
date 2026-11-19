@@ -5,6 +5,8 @@
 # run rustup to test with latest rust version
 rustup update
 
+if [ -e "/opt/ros/lyrical/setup.bash" ]; then
+    source "/opt/ros/lyrical/setup.bash"
 if [ -e "/opt/ros/kilted/setup.bash" ]; then
     source "/opt/ros/kilted/setup.bash"
 elif [ -e "/opt/ros/jazzy/setup.bash" ]; then

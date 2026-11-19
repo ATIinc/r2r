@@ -1482,15 +1482,13 @@ impl Node {
 
         let mut ctx = self.context.context_handle.lock().unwrap();
         let ret = unsafe {
-            // TODO: conditionally call rcl_timer_init on older releases where rcl_timer_init2 is not available
-            rcl_timer_init2(
+            init_timer(
                 &mut timer_handle.as_mut().get_unchecked_mut().handle,
                 clock.clock_handle.as_mut(),
                 ctx.as_mut(),
                 period.as_nanos() as i64,
                 None,
-                rcutils_get_default_allocator(),
-                true,
+                rcutils_get_default_allocator()
             )
         };
 
@@ -1526,6 +1524,43 @@ impl Node {
     pub fn get_ros_clock(&self) -> Arc<Mutex<Clock>> {
         self.ros_clock.clone()
     }
+}
+
+#[cfg(any(
+    r2r__ros__distro__foxy,
+    r2r__ros__distro__galactic,
+    r2r__ros__distro__humble,
+    r2r__ros__distro__iron
+))]
+#[inline]
+pub unsafe fn init_timer(
+    timer: *mut rcl_timer_t,
+    clock: *mut rcl_clock_t,
+    context: *mut rcl_context_t,
+    period: i64,
+    callback: rcl_timer_callback_t,
+    allocator: rcl_allocator_t,
+) -> rcl_ret_t {
+    rcl_timer_init(timer, clock, context, period, callback, allocator)
+}
+
+// For Jazzy, Rolling, and newer
+#[cfg(not(any(
+    r2r__ros__distro__foxy,
+    r2r__ros__distro__galactic,
+    r2r__ros__distro__humble,
+    r2r__ros__distro__iron
+)))]
+#[inline]
+pub unsafe fn init_timer(
+    timer: *mut rcl_timer_t,
+    clock: *mut rcl_clock_t,
+    context: *mut rcl_context_t,
+    period: i64,
+    callback: rcl_timer_callback_t,
+    allocator: rcl_allocator_t,
+) -> rcl_ret_t {
+    rcl_timer_init2(timer, clock, context, period, callback, allocator, true)
 }
 
 #[derive(Debug, Clone, PartialEq)]

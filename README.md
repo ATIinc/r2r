@@ -14,7 +14,7 @@ These bindings are being written organically when things are needed by me and ot
 How to use
 --------------------
 1. Make sure you have libclang installed. (e.g. libclang-dev on ubuntu)
-2. Depend on this package in Cargo.toml: `r2r = "0.9.5"`
+2. Depend on this package in Cargo.toml: `r2r = "0.9.7"`
 3. You need to source your ROS2 installation before building/running.
 4. The bindings will rebuild automatically if/when you source your workspace(s).
 5. If you make changes to existing message types, run `cargo clean -p r2r_msg_gen` to force recompilation of the rust message types on the next build.
@@ -34,7 +34,7 @@ Since the default behavior is to build all sourced message types, build time can
 
 What works?
 --------------------
-- Up to date with ROS2 ~Dashing~ ~Eloquent~ Foxy Galactic Humble Iron Jazzy Kilted
+- Up to date with ROS2 ~Dashing~ ~Eloquent~ Foxy Galactic Humble Iron Jazzy Kilted Lyrical
 - Building Rust types
 - Publish/subscribe
 - Services
@@ -46,7 +46,13 @@ What works?
 Changelog
 --------------------
 #### [Unreleased]
-- Update to support Kilted
+- Update to support Kilted, Lyrical
+
+#### [0.9.7] - 2026-09-13
+- Bump bindgen version to fix errors with LLVM 22 and later <https://github.com/sequenceplanner/r2r/pull/133>.
+
+#### [0.9.6] - 2025-06-04
+- rcl_timer_init wrapper to compile for Foxy Galactic Humble Iron Jazzy and Lyrical
 
 #### [0.9.5] - 2025-04-22
 - Add `/set_parameters_atomically` <https://github.com/sequenceplanner/r2r/pull/120>, <https://github.com/sequenceplanner/r2r/pull/121>. Fixes `ros2 param ...` on Jazzy.
